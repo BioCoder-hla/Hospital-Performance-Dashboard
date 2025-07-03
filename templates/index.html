@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Performance Dashboard</title>
+    
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Icon Library (for export icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    
+    <!-- Charting Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+    
+    <!-- Optional: Add a favicon to suppress 404 -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <h1>Hospital Performance Dashboard</h1>
+        <!-- MODIFIED: Theme toggle button structure -->
+        <button id="dark-mode-toggle" aria-label="Toggle Theme">
+            <i id="theme-icon" class="fas"></i>
+            <span id="theme-text"></span>
+        </button>
+    </header>
+
+    <main>
+        <!-- KPI Row -->
+        <div class="kpi-grid">
+            <div class="kpi-card" aria-label="Total Hospitals Analyzed">
+                <h3>Total Hospitals</h3>
+                <p id="kpi-total-hospitals">--</p>
+            </div>
+            <div class="kpi-card" aria-label="Average Readmission Score">
+                <h3>Avg. Readmission Score</h3>
+                <p id="kpi-avg-score">--</p>
+            </div>
+        </div>
+
+        <!-- Filter Status Bar (Initially hidden) -->
+        <div id="filter-status" class="filter-status-bar" style="display: none;">
+            <span id="filter-text"></span>
+            <button id="reset-filter-btn" title="Reset Filter">×</button>
+        </div>
+
+        <!-- Main Dashboard Layout -->
+        <div class="dashboard-container">
+            <!-- Main Panel -->
+            <div class="main-panel">
+                <div class="card full-height">
+                    <div class="card-header">
+                        <h2>Average Performance Score by State</h2>
+                        <button class="export-btn" data-target="us-map" title="Export Map as PNG"><i class="fas fa-download"></i></button>
+                    </div>
+                    <div id="us-map-container">
+                        <div id="us-map"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>State Performance Details</h2>
+                        <button class="export-btn" data-target="state-performance-table" title="Export Table as CSV"><i class="fas fa-download"></i></button>
+                    </div>
+                    <div class="table-container">
+                        <table id="state-performance-table">
+                            <thead>
+                                <tr>
+                                    <th>State</th>
+                                    <th>Hospitals</th>
+                                    <th>Patient Volume</th>
+                                    <th>Best Score</th>
+                                    <th>Worst Score</th>
+                                    <th>Average Score</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Panel -->
+            <div class="sidebar-panel">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>National Performance Rating</h2>
+                        <button class="export-btn" data-target="performance-donut-chart" title="Export Chart as PNG"><i class="fas fa-download"></i></button>
+                    </div>
+                    <div class="chart-wrapper"><canvas id="performance-donut-chart"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Performance by Hospital Volume</h2>
+                        <button class="export-btn" data-target="volume-bar-chart" title="Export Chart as PNG"><i class="fas fa-download"></i></button>
+                    </div>
+                    <div class="chart-wrapper"><canvas id="volume-bar-chart"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Top 5 Worst Hospitals (Heart Failure)</h2>
+                        <button class="export-btn" data-target="top-hospitals-table" title="Export Table as CSV"><i class="fas fa-download"></i></button>
+                    </div>
+                    <div class="table-container">
+                        <table id="top-hospitals-table">
+                            <thead>
+                                <tr>
+                                    <th>Hospital</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Top 5 Worst Performing Measures</h2>
+                        <button class="export-btn" data-target="worst-measures-table" title="Export Table as CSV"><i class="fas fa-download"></i></button>
+                    </div>
+                    <div class="table-container">
+                        <table id="worst-measures-table">
+                            <thead>
+                                <tr>
+                                    <th>Measure</th>
+                                    <th>Hospitals</th>
+                                    <th>Avg Score</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Main JavaScript file, loaded at the end -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
